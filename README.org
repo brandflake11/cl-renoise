@@ -1,4 +1,4 @@
-* cl-Renoise
+* Cl-renoise
 
   Cl-renoise (or just renoise in Common Lisp) is a Common Lisp package to control renoise with OSC commands. It requires a working setup of cm-incudine (see [[https://github.com/brandflake11/install-cm-incudine][install-cm-incudine]] for help with installing cm-incudine). Cl-renoise could be useful when wanting to create music using common music, incudine, and renoise together. This even allows for scheduling renoise, using Common Lisp to "puppeteer" renoise. 
 
