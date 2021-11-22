@@ -65,7 +65,9 @@ No longer do you have to leave your lisp environment. Simply control renoise fro
   # Include implementing this with cm
   # Also include setting up renoise's osc input and think about exposing :RENOISE's *address* and *port*
 
-* 
+* License
+
+  Cl-renoise is licensed under the GPLv3, and I assume no responsibility for anything that happens if you use it. Use at your own risk.
 
 
   

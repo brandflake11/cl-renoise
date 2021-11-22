@@ -1,4 +1,21 @@
-;; You need to have CM-INCUDINE installed. Normal CM just won't do, I'm pretty sure.
+;; Cl-renoise
+;; Copyright (C) 2021  Brandon Hale
+
+;; This program is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+
+;; You need to have CM-INCUDINE installed. Normal CM just won't do.
 ;; Incudine is used for realtime and osc
 
 (defpackage :renoise
