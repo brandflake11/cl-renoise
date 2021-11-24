@@ -59,7 +59,7 @@
 
 No longer do you have to leave your lisp environment. Simply control renoise from lisp!
   
-* Getting Started
+# * Getting Started
 
   # Include notes on how to clone this to quicklisp and load the needed packages from a clean sbcl
   # Include implementing this with cm
