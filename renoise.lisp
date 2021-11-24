@@ -31,97 +31,126 @@
 (defparameter *oscout* (incudine.osc:open :direction :output :host *address* :port *port*))
 (cm::osc-open-default :host *address* :port *port* :direction :output)
 
-(defun renoise (message &optional arg)
-  (cond ((or (eql message 1) (eql message :start) (eql message :play)) (sprout
-									(new cm::osc :time 0
-									  :types ""
-									  :message ""
-									  :path "/renoise/transport/start")))
-	((or (eql message 0) (eql message :stop)) (sprout
-						   (new cm::osc :time 0
-						     :types ""
-						     :message ""
-						     :path "/renoise/transport/stop")))
-	((or (eql message 2) (eql message :continue)) (sprout
-						       (new cm::osc :time 0
-							 :types ""
-							 :message ""
-							 :path "/renoise/transport/continue")))
-	((eql message :loop) (sprout
-			      (new cm::osc :time 0
-				:types "i"
-				:message arg
-				:path "/renoise/transport/loop/pattern")))
-	((or (eql message 6) (eql message :panic)) (sprout
-						    (new cm::osc :time 0
-						      :types ""
-						      :message ""
-						      :path "/renoise/transport/panic")))
-	((or (eql message :schedule) (eql message :schedule-pattern)) (sprout
-								       (new cm::osc :time 0
-									 :types "i"
-									 :message arg
-									 :path "/renoise/song/sequence/schedule_set")))
-	((or (eql message :trigger) (eql message :trigger-pattern)
-	     (eql message :pattern)) (sprout
-				      (new cm::osc :time 0
-					:types "i"
-					:message (+ 1 arg)
-					:path "/renoise/song/sequence/trigger")))
-	((eql message :bpm) (sprout
-			     (new cm::osc :time 0
-			       :types "i"
-			       :message arg
-			       :path "/renoise/song/bpm")))
-	((eql message :lpb) (sprout
-			     (new cm::osc :time 0
-			       :types "i"
-			       :message arg
-			       :path "/renoise/song/lpb")))
-	((or (eql message :octave) (eql message :oct)) (sprout
-							(new cm::osc :time 0
-							  :types "i"
-							  :message arg
-							  :path "/renoise/song/edit/octave")))
-	((eql message :edit) (sprout
-			      (new cm::osc :time 0
-				:types "i"
-				:message arg
-				:path "/renoise/song/edit/mode")))
-	((or (eql message :metro) (eql message :metronome)) (sprout
-							     (new cm::osc :time 0
-							       :types "i"
-							       :message arg
-							       :path "/renoise/song/record/metronome")))
-	((or (eql message :pre-metro) (eql message :metronome-precount)
-	     (eql message :precount-metronome) (eql message :metro-pre)
-	     (eql message :pre-metronome)) (sprout
-					    (new cm::osc :time 0
-					      :types "i"
-					      :message arg
-					      :path "/renoise/song/record/metronome_precount")))
-	((eql message :solo) (sprout
-			      (new cm::osc :time 0
-				:types ""
-				:message ""
-				;; Use -1 as arg to solo currently selected track
-				:path (concatenate 'string
-						   "/renoise/song/track/" (write-to-string arg) "/solo"))))
-	((eql message :mute) (sprout
-			      (new cm::osc :time 0
-				:types ""
-				:message ""
-				;; Use -1 as arg to solo currently selected track
-				:path (concatenate 'string
-						   "/renoise/song/track/" (write-to-string arg) "/mute"))))
-	((eql message :unmute) (sprout
+(defun renoise (message &optional arg arg2)
+  (labels ((bool-to-num (val)
+	     (if (eql val t)
+		 1
+		 (if (or (eql val 0) (eql val 1))
+		     val))))
+    (cond ((or (eql message 1) (eql message :start) (eql message :play)) (sprout
+									  (new cm::osc :time 0
+									    :types ""
+									    :message ""
+									    :path "/renoise/transport/start")))
+	  ((or (eql message 0) (eql message :stop)) (sprout
+						     (new cm::osc :time 0
+						       :types ""
+						       :message ""
+						       :path "/renoise/transport/stop")))
+	  ((or (eql message 2) (eql message :continue)) (sprout
+							 (new cm::osc :time 0
+							   :types ""
+							   :message ""
+							   :path "/renoise/transport/continue")))
+	  ((eql message :loop) (sprout
+				(new cm::osc :time 0
+				  :types "i"
+				  :message arg
+				  :path "/renoise/transport/loop/pattern")))
+	  ((or (eql message 6) (eql message :panic)) (sprout
+						      (new cm::osc :time 0
+							:types ""
+							:message ""
+							:path "/renoise/transport/panic")))
+	  ((or (eql message :schedule) (eql message :schedule-pattern)) (sprout
+									 (new cm::osc :time 0
+									   :types "i"
+									   :message arg
+									   :path "/renoise/song/sequence/schedule_set")))
+	  ((or (eql message :trigger) (eql message :trigger-pattern)
+	       (eql message :pattern)) (sprout
+					(new cm::osc :time 0
+					  :types "i"
+					  :message (+ 1 arg)
+					  :path "/renoise/song/sequence/trigger")))
+	  ((eql message :bpm) (sprout
+			       (new cm::osc :time 0
+				 :types "i"
+				 :message arg
+				 :path "/renoise/song/bpm")))
+	  ((eql message :lpb) (sprout
+			       (new cm::osc :time 0
+				 :types "i"
+				 :message arg
+				 :path "/renoise/song/lpb")))
+	  ((or (eql message :octave) (eql message :oct)) (sprout
+							  (new cm::osc :time 0
+							    :types "i"
+							    :message arg
+							    :path "/renoise/song/edit/octave")))
+	  ((eql message :edit) (sprout
+				(new cm::osc :time 0
+				  :types "i"
+				  :message (bool-to-num arg)
+				  :path "/renoise/song/edit/mode")))
+	  ((or (eql message :metro) (eql message :metronome)) (sprout
+							       (new cm::osc :time 0
+								 :types "i"
+								 :message arg
+								 :path "/renoise/song/record/metronome")))
+	  ((or (eql message :pre-metro) (eql message :metronome-precount)
+	       (eql message :precount-metronome) (eql message :metro-pre)
+	       (eql message :pre-metronome)) (sprout
+					      (new cm::osc :time 0
+						:types "i"
+						:message arg
+						:path "/renoise/song/record/metronome_precount")))
+	  ((eql message :solo) (sprout
 				(new cm::osc :time 0
 				  :types ""
 				  :message ""
 				  ;; Use -1 as arg to solo currently selected track
 				  :path (concatenate 'string
-						     "/renoise/song/track/" (write-to-string arg) "/unmute"))))))
-
+						     "/renoise/song/track/" (write-to-string arg) "/solo"))))
+	  ((eql message :mute) (sprout
+				(new cm::osc :time 0
+				  :types ""
+				  :message ""
+				  ;; Use -1 as arg to solo currently selected track
+				  :path (concatenate 'string
+						     "/renoise/song/track/" (write-to-string arg) "/mute"))))
+	  ((eql message :unmute) (sprout
+				  (new cm::osc :time 0
+				    :types ""
+				    :message ""
+				    ;; Use -1 as arg to solo currently selected track
+				    :path (concatenate 'string
+						       "/renoise/song/track/" (write-to-string arg) "/unmute"))))
+	  ;; :bypass-effect and :enable-effect takes two arguments. First is track number and second is effect number.
+	  ((or (eql message :bypass-effect) (eql message :disable-effect))
+	   (sprout
+	    (new cm::osc :time 0
+	      :types "i"
+	      :message 1
+	      ;; Use -1 as arg to solo currently selected track
+	      :path (concatenate 'string
+				 "/renoise/song/track/"
+				 (write-to-string arg)
+				 "/device/"
+				 (write-to-string (1+ arg2))
+				 "/bypass"))))
+	  ((eql message :enable-effect)
+	   (sprout
+	    (new cm::osc :time 0
+	      :types "i"
+	      :message 0
+	      ;; Use -1 as arg to solo currently selected track
+	      :path (concatenate 'string
+				 "/renoise/song/track/"
+				 (write-to-string arg)
+				 "/device/"
+				 (write-to-string (1+ arg2))
+				 "/bypass")))))))
 
 ;; Some Examples Below:
 ;; Change octave of renoise
